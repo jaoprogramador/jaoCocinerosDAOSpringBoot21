@@ -3,6 +3,7 @@ package com.jao.cocineros.service;
 import com.jao.cocineros.dao.CocinerosDAO;
 import com.jao.cocineros.dto.CocinerosRequest;
 import com.jao.cocineros.dto.CocinerosResponse;
+import com.jao.cocineros.model.Cocineros;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +30,11 @@ public class CocinerosServiceImpl implements ICocinerosService {
     }
 
     @Override
-    public void save(CocinerosRequest request) {
+    public CocinerosResponse save(CocinerosRequest request) {
         // El DAO se encarga de mapear y persistir mediante el request
-        cocinerosDAO.save(request);
+
+                cocinerosDAO.save(request);
+        return new CocinerosResponse(null,request.getNombre(), request.getEspecialidad(),request.getAnosExperiencia(),request.getActivo());
     }
 
     @Override

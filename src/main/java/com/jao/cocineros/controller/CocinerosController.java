@@ -3,9 +3,12 @@ package com.jao.cocineros.controller;
 import com.jao.cocineros.dto.CocinerosRequest;
 import com.jao.cocineros.dto.CocinerosResponse;
 import com.jao.cocineros.service.ICocinerosService;
+import com.jao.cocineros.utils.ManejoErrores;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,9 +37,14 @@ public class CocinerosController {
 
     // POST: Crear un nuevo cocinero
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody CocinerosRequest request) {
-        cocinerosService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> save(@RequestBody @Valid CocinerosRequest request, BindingResult result) {
+        //cocinerosService.save(request);
+        //return ResponseEntity.status(HttpStatus.CREATED).build();
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ManejoErrores.procesar(result));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.cocinerosService.save(request));
+
     }
 
     // PUT: Actualizar un cocinero existente

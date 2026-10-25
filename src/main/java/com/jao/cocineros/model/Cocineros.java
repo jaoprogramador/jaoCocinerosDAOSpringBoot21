@@ -3,6 +3,8 @@ package com.jao.cocineros.model;
 import com.jao.cocineros.dto.CocinerosRequest;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,13 +18,18 @@ public class Cocineros {
     private String especialidad;
 
     private Integer anosExperiencia;
-
+    private String email;
+    private String telefono;
+    private LocalDate fechaNacimiento;
     private Boolean activo;
 
     public Cocineros(CocinerosRequest request) {
         this.nombre = request.getNombre();
         this.especialidad = request.getEspecialidad();
         this.anosExperiencia = request.getAnosExperiencia();
+        this.email = request.getEmail();
+        this.telefono = request.getTelefono();
+        this.fechaNacimiento = request.getFechaNacimiento();
         this.activo = request.getActivo();
     }
 }
