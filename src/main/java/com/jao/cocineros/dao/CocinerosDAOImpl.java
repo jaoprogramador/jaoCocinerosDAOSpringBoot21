@@ -4,88 +4,69 @@ package com.jao.cocineros.dao;
 import com.jao.cocineros.dto.CocinerosRequest;
 import com.jao.cocineros.dto.CocinerosResponse;
 import com.jao.cocineros.model.Cocineros;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Repository
+@RequiredArgsConstructor
 public class CocinerosDAOImpl implements CocinerosDAO {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
-    @Transactional(readOnly = true)
-
     public List<CocinerosResponse> findAll() {
-        String jpql = """
-                SELECT new com.jao.cocineros.dto.CocinerosResponse(
-                    c.id, c.nombre, c.especialidad, c.anosExperiencia, c.activo)
-                    FROM Cocineros c
-                """;
+        String sql = "SELECT * FROM cocineros";
+        List<Cocineros> cocineros = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Cocineros.class));
+        return cocineros.stream()
+                .map(CocinerosResponse::new)
+                .toList();
 
-        return this.entityManager.createQuery(jpql, CocinerosResponse.class)
-                .getResultList();
+
     }
 
     @Override
-    @Transactional(readOnly = true)
     public CocinerosResponse findById(Long id) {
-        String jpql = """
-                SELECT new com.example.cocineros.presentation.dto.CocinerosResponse(
-                    c.id, c.nombre, c.especialidad, c.anosExperiencia, c.activo)
-                    FROM Cocineros c
-                    WHERE c.id = :id
-                """;
+        Cocineros cocinero;
 
         try {
-            return this.entityManager.createQuery(jpql, CocinerosResponse.class)
-                    .setParameter("id", id)
-                    .getSingleResult();
+            String sql = "SELECT * FROM cocineros WHERE id = ?";
+            cocinero = this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Cocineros.class), id);
         } catch (Exception e) {
             return null;
         }
+        if (cocinero != null) {
+            return new CocinerosResponse(cocinero);
+        }
+        return null;
+
     }
 
     @Override
-    @Transactional
     public void save(CocinerosRequest request) {
-        Cocineros cocinero = new Cocineros(request); // Asegúrate de tener este constructor en tu Entity
-        this.entityManager.persist(cocinero);
+        String sql = "INSERT INTO cocineros (nombre, especialidad, anos_experiencia, activo) VALUES (?, ?, ? , ?)";
+        this.jdbcTemplate.update(sql, request.getNombre(), request.getEspecialidad(),request.getAnosExperiencia(),request.getActivo());
     }
 
     @Override
-    @Transactional
-    public boolean update(Long id, CocinerosRequest request) {
-        Cocineros cocinero = this.entityManager.find(Cocineros.class, id);
-        if (cocinero == null) {
-            return false;
-        }
+    public boolean update(Long codigo, CocinerosRequest request) {
+        String sql = "UPDATE cocineros SET nombre = ?, especialidad = ? WHERE id = ?";
+        int result = this.jdbcTemplate.update(sql, request.getNombre(), request.getEspecialidad(), codigo);
 
-        cocinero.setNombre(request.getNombre());
-        cocinero.setEspecialidad(request.getEspecialidad());
-        cocinero.setAnosExperiencia(request.getAnosExperiencia());
-        cocinero.setActivo(request.getActivo());
-
-        this.entityManager.merge(cocinero);
-
-        return true;
+        return (result == 1);
     }
 
     @Override
-    @Transactional
     public boolean delete(Long id) {
-        Cocineros cocinero = this.entityManager.find(Cocineros.class, id);
-        if (cocinero == null) {
-            return false;
-        }
+        String sql = "DELETE FROM cocineros WHERE id = ?";
+        int result = this.jdbcTemplate.update(sql, id);
 
-        this.entityManager.remove(cocinero);
-
-        return true;
+        return (result == 1);
     }
 }
 

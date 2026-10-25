@@ -8,4 +8,4 @@ Endpoints:
     http://localhost:8090/api/cocineros/5
     http://localhost:8090/api/cocineros/
     
-30.- Como usar el patrón DAO con JPA
+30.- Como usar el patrón DAO con JDBC
