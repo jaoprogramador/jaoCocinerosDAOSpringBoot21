@@ -1,4 +1,4 @@
-package com.jao.cocineros.dto;
+package com.jao.cocineros.model.dto;
 import lombok.Builder;
 import lombok.Data;
 import jakarta.validation.constraints.*;

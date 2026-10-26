@@ -1,6 +1,6 @@
-package com.jao.cocineros.model;
+package com.jao.cocineros.model.entity;
 
-import com.jao.cocineros.dto.CocinerosRequest;
+import com.jao.cocineros.model.dto.CocinerosRequest;
 import lombok.*;
 
 import java.time.LocalDate;

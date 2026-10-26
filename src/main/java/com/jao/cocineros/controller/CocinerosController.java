@@ -1,7 +1,9 @@
 package com.jao.cocineros.controller;
 
-import com.jao.cocineros.dto.CocinerosRequest;
-import com.jao.cocineros.dto.CocinerosResponse;
+import com.jao.cocineros.model.dto.CocinerosRequest;
+import com.jao.cocineros.model.dto.CocinerosResponse;
+import com.jao.cocineros.model.mapper.CocineroRequestMapper;
+import com.jao.cocineros.model.mapper.CocineroResponseMapper;
 import com.jao.cocineros.service.ICocinerosService;
 import com.jao.cocineros.utils.ManejoErrores;
 import jakarta.validation.Valid;
@@ -19,6 +21,7 @@ import java.util.List;
 public class CocinerosController {
 
     private final ICocinerosService cocinerosService;
+
 
     // GET: Obtener todos
     @GetMapping

@@ -1,9 +1,9 @@
 package com.jao.cocineros.dao;
 
 
-import com.jao.cocineros.dto.CocinerosRequest;
-import com.jao.cocineros.dto.CocinerosResponse;
-import com.jao.cocineros.model.Cocineros;
+import com.jao.cocineros.model.dto.CocinerosRequest;
+import com.jao.cocineros.model.dto.CocinerosResponse;
+import com.jao.cocineros.model.entity.Cocineros;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -20,43 +20,45 @@ public class CocinerosDAOImpl implements CocinerosDAO {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<CocinerosResponse> findAll() {
+    public List<Cocineros> findAll() {
         String sql = "SELECT * FROM cocineros";
-        List<Cocineros> cocineros = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Cocineros.class));
-        return cocineros.stream()
-                .map(CocinerosResponse::new)
-                .toList();
-
-
+        // Devuelve la lista pura de Entidades de Base de Datos
+        return this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Cocineros.class));
     }
 
     @Override
-    public CocinerosResponse findById(Long id) {
-        Cocineros cocinero;
-
+    public Cocineros findById(Long id) {
         try {
             String sql = "SELECT * FROM cocineros WHERE id = ?";
-            cocinero = this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Cocineros.class), id);
+            // Devuelve la Entidad directamente (o lanza excepción si no existe)
+            return this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Cocineros.class), id);
         } catch (Exception e) {
-            return null;
+            return null; // O puedes manejarlo con Optional desde el DAO si prefieres
         }
-        if (cocinero != null) {
-            return new CocinerosResponse(cocinero);
-        }
-        return null;
-
     }
 
     @Override
-    public void save(CocinerosRequest request) {
-        String sql = "INSERT INTO cocineros (nombre, especialidad, anos_experiencia, activo) VALUES (?, ?, ? , ?)";
-        this.jdbcTemplate.update(sql, request.getNombre(), request.getEspecialidad(),request.getAnosExperiencia(),request.getActivo());
+    public void save(Cocineros cocineros) {
+        String sql = "INSERT INTO cocineros (nombre, especialidad, anos_experiencia, activo) VALUES (?, ?, ?, ?)";
+        this.jdbcTemplate.update(sql,
+                cocineros.getNombre(),
+                cocineros.getEspecialidad(),
+                cocineros.getAnosExperiencia(),
+                cocineros.getActivo()
+        );
     }
 
     @Override
-    public boolean update(Long codigo, CocinerosRequest request) {
-        String sql = "UPDATE cocineros SET nombre = ?, especialidad = ? WHERE id = ?";
-        int result = this.jdbcTemplate.update(sql, request.getNombre(), request.getEspecialidad(), codigo);
+    public boolean update(Long id, Cocineros cocineros) {
+        // Recibe la entidad ya mapeada, no el Request
+        String sql = "UPDATE cocineros SET nombre = ?, especialidad = ?, anos_experiencia = ?, activo = ? WHERE id = ?";
+        int result = this.jdbcTemplate.update(sql,
+                cocineros.getNombre(),
+                cocineros.getEspecialidad(),
+                cocineros.getAnosExperiencia(),
+                cocineros.getActivo(),
+                id
+        );
 
         return (result == 1);
     }

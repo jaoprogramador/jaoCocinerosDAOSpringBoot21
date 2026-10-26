@@ -18,3 +18,12 @@ Endpoints:
 -	Creamos un paquete utils para personalizar los mensajes
 -	En el dto añadimos los mensajes y hacemos en el controller la referencia a la utilidad
 
+32.- Uso de dtos y mapeers con mapstrut
+-   
+-	Añadimos dependencias de mapstrut core y procesor(también en runtime)
+-	Agrupamos en model dto, mapper y entidades junto con sus cclases
+-	Creamos dos interfaces mapeadoras en dto
+-	Quitamos en CocinerosResponse y Request los constructores ya que ahora el mapeo se hace en los mapers
+-	Ajustamos los daos y el service ya que ahora usarán los mapeadores
+
+- 

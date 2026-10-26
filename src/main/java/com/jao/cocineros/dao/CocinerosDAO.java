@@ -1,18 +1,21 @@
 package com.jao.cocineros.dao;
 
 
-import com.jao.cocineros.dto.CocinerosRequest;
-import com.jao.cocineros.dto.CocinerosResponse;
-import com.jao.cocineros.model.Cocineros;
+import com.jao.cocineros.model.dto.CocinerosRequest;
+import com.jao.cocineros.model.dto.CocinerosResponse;
+import com.jao.cocineros.model.entity.Cocineros;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface CocinerosDAO {
-    List<CocinerosResponse> findAll();
-    CocinerosResponse findById(Long id);
-    void save(CocinerosRequest request);
-    boolean update(Long codigo, CocinerosRequest request);
+    List<Cocineros> findAll();
+
+    Cocineros findById(Long id);
+
+    void save(Cocineros cocineros);
+
+    boolean update(Long id, Cocineros cocineros);
+
     boolean delete(Long id);
 }
