@@ -10,9 +10,10 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CocineroResponseMapper {
-    //@Mappings(
-            //@Mapping(source = "id", target = "codigo")
-    //)
+    @Mappings(
+            @Mapping(source = "id", target = "id")
+    )
+    @Mapping(source = "datosEscuela", target = "datosEscuela")
     CocinerosResponse toCocineroResponse(Cocineros cocinero);
 
     List<CocinerosResponse> toCocineroResponseList(List<Cocineros> cocineros);

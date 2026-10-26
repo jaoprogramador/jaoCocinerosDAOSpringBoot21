@@ -26,4 +26,14 @@ Endpoints:
 -	Quitamos en CocinerosResponse y Request los constructores ya que ahora el mapeo se hace en los mapers
 -	Ajustamos los daos y el service ya que ahora usarán los mapeadores
 
-- 
+33.- Mappers anidados
+- creamos la entidad datosEscuela que tiene relacion con Cocineros
+- en Cocineros referenciamos a DatosEscuela
+- en CocinerosResponseMapper hacemos la referencia de mapeo 
+- en CocinerosRequest-Response ponemos @Valid y la referencia a DatosEscuelaRequest
+- en Cocineros-DatosEscuela ponemos la referencia
+- Modificamos el service ya que ahora las altas y consultos deben cargar estos objeytos
+- Modificamos los DAOs
+- Creamos un script para el create table DatosEscuela
+
+

@@ -12,16 +12,14 @@ import java.time.LocalDate;
 public class Cocineros {
 
     private Long id;
-
     private String nombre;
-
     private String especialidad;
-
     private Integer anosExperiencia;
     private String email;
     private String telefono;
-    private LocalDate fechaNacimiento;
+    private String fechaNacimiento;
     private Boolean activo;
+    private DatosEscuela datosEscuela;
 
     public Cocineros(CocinerosRequest request) {
         this.nombre = request.getNombre();

@@ -43,7 +43,7 @@ public class CocinerosServiceImpl implements ICocinerosService {
     public CocinerosResponse save(CocinerosRequest request) {
         // 1. Convertimos el Request (DTO) a Entidad usando el RequestMapper
         Cocineros cocinero = cocineroRequestMapper.toCocinero(request);
-
+        cocinero.getDatosEscuela().setCocinero(cocinero);
         // 2. Guardamos la entidad en la base de datos a través del DAO
         cocinerosDAO.save(cocinero);
 
